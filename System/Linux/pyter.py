@@ -24,4 +24,17 @@ if arg[1] == "load":
     except KeyError:
         print("No package found")
 elif arg[1] == "install":
+    with open(arg[2], "r")as f:
+        data = json.load(f)
+    pkg_name = data["name"]
+    file_name = data["file_name"]
+    os.system(f"pip3 install {''+' '.join(data['packages'])}")
 
+    with open(".json", "r") as e:
+        cnf = json.load(e)
+    cnf[pkg_name] = {}
+    cnf[pkg_name]["cnf_path"] = arg[2]
+    os.system(f"mkdir /etc/PYTER/{pkg_name}")
+    os.system(f"mv {arg[2]} /etc/PYTER/{pkg_name}")
+    os.system(f"mv {file_name} /etc/PYTER/{pkg_name}")
+    print(f"Installed '{pkg_name}'")
